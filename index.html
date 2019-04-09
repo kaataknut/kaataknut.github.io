@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <div class="container">
+        <h1>Hangman</h1>
+        <div class="setup">
+            <div class="form-group">
+                <label for="hangman-word">Secret word</label>
+                <div class="input-group">
+                    <input type="text" id="hangman-word" autofocus>
+                    <button type="button" id="btn-toggle-input-type">Hide</button>
+                </div>
+            </div>
+            <button type="button" id="btn-play-word" class="btn-block">Play</button>
+        </div>
+
+        <div class="playmode" style="display: none;">
+            <div id="display"></div>
+            <input type="text"
+                id="input-guess"
+                placeholder="Letter/word"
+                minlength="1">
+            <div class="input-guess-info"></div>
+            <button type="button" id="btn-guess-letter" class="btn-block">Guess letter</button>
+            <button type="button" id="btn-guess-word" class="btn-block">Guess word</button>
+        </div>
+    </div>
+    <script src="hangman.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
