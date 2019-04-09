@@ -15,11 +15,12 @@ function Hangman(options) {
     }
 
     this.guessWord = function(word) {
-        let correct = isCorrect(word);
-        if(correct) currentWord = hiddenWord;
+        let gameSolved = isCorrect(word);
+        
+        if(gameSolved) currentWord = hiddenWord;
+        else wordGuesses.push(word);
 
-        wordGuesses.push(word);
-        return {correct, currentWord};
+        return {gameSolved, currentWord};
     }
 
     this.guessLetter = function(character) {
@@ -43,7 +44,8 @@ function Hangman(options) {
         return {
             hit,
             message: hit ? "hit" : "miss",
-            currentWord
+            currentWord,
+            gameSolved: isCorrect(currentWord)
         };
     }
 
@@ -51,8 +53,8 @@ function Hangman(options) {
         return currentWord;
     }
 
-    this.totalGuesses = function() {
-        return hits.length + misses.length + wordGuesses.length;
+    this.results = function() {
+        return { misses, wordGuesses, hits, hiddenWord };
     }
 
     function isCorrect(word) {

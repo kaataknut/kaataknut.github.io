@@ -4,6 +4,7 @@ const ENTER_KEY_CODE = 13;
 // UI controls
 const setupContainer = document.querySelector("div.setup");
 const playContainer = document.querySelector("div.playmode");
+const resultsContainter = document.querySelector("div.results");
 const displayWordContainer = document.querySelector("div#display");
 
 const inputHangmanWord = document.querySelector("#hangman-word");
@@ -15,9 +16,11 @@ const inputGuess = document.querySelector("#input-guess");
 const btnLetterGuess = document.querySelector("#btn-guess-letter");
 const btnWordGuess = document.querySelector("#btn-guess-word");
 
+const btnGiveUp = document.querySelector("#btn-give-up");
+const btnPlayAgain = document.querySelector("#btn-play-again");
+
 // Game
 const hangman = new Hangman();
-playword("Dette er en lang setning ");
 
 btnToggleInputType.addEventListener("click", (e) => {
     let newType = inputHangmanWord.type === "text" ? "password" : "text";
@@ -31,13 +34,23 @@ inputHangmanWord.addEventListener("keydown", (e) => {
 
 btnPlayWord.addEventListener("click", playword);
 
-function playword(word) {
+function playword() {
+    let word = inputHangmanWord.value;
+
+    if(word.length === 0) {
+        alert("Must have at least one character");
+        inputHangmanWord.focus();
+        return;
+    }
+
     hangman.play(word);
 
     setupContainer.style.display = "none";
     playContainer.style.display = "block";
 
     displayWord(hangman.currentWord());
+
+    inputGuess.focus();
 }
 
 function displayWord(word) {
@@ -52,6 +65,19 @@ function displayWord(word) {
 
     displayWordContainer.innerHTML = "";
     displayWordContainer.append(fragment);
+}
+
+function displayResults() {
+    let {misses, wordGuesses, hits, hiddenWord} = hangman.results(),
+        count = misses.length + wordGuesses.length,
+        list = misses.join(", ") + (misses.length > 0 && wordGuesses.length > 0 ? " + " : "") + wordGuesses.join(", ");
+        message = count + (count > 0 ? " (" + list + ")" : "");
+
+    resultsContainter.querySelector("#correct-word").innerText = hiddenWord;
+    resultsContainter.querySelector("#miss-count").innerText = message;
+
+    playContainer.style.display = "none";
+    resultsContainter.style.display = "block";
 }
 
 inputGuess.addEventListener("keydown", (e) => {
@@ -75,13 +101,10 @@ btnLetterGuess.addEventListener("click", (e) => {
     let result = hangman.guessLetter(letter);
     displayWord(result.currentWord);
 
-    if(result.hit) {
-        console.log("It is a hit!");
-    } else {
-        console.log("Ohhh.. miss");
-    }
+    inputGuess.value = "";
 
-    inputGuess.focus();
+    if(result.gameSolved) displayResults();
+    else inputGuess.focus();
 });
 
 btnWordGuess.addEventListener("click", (e) => {
@@ -96,11 +119,21 @@ btnWordGuess.addEventListener("click", (e) => {
     let result = hangman.guessWord(word);
     displayWord(result.currentWord);
 
-    if(result.correct) {
-        console.log("Correct!");
-    } else {
-        console.log("Ohhh.. miss");
-    }
+    inputGuess.value = "";
 
-    inputGuess.focus();
+    if(result.gameSolved) displayResults();
+    else inputGuess.focus();
 });
+
+btnGiveUp.addEventListener("click", displayResults);
+
+btnPlayAgain.addEventListener("click", (e) => {
+    inputHangmanWord.value = "";
+
+    resultsContainter.style.display = "none";
+    setupContainer.style.display = "block";
+
+    inputHangmanWord.focus();
+});
+
+
