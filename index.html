@@ -1,47 +1,50 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Plan</title>
+    <meta name="description" content="The plan">
+    <meta name="author" content="kaata">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+
 </head>
+
 <body>
-    <div class="container">
-        <h1>Hangman</h1>
-        <div class="setup">
-            <div class="form-group">
-                <label for="hangman-word">Secret word</label>
-                <div class="input-group">
-                    <input type="text" id="hangman-word" autofocus>
-                    <button type="button" id="btn-toggle-input-type">Hide</button>
-                </div>
-            </div>
-            <button type="button" id="btn-play-word" class="btn-block">Play</button>
+    <nav class="navbar text-white py-3" style="background-color: #90506A;">
+        <div class="container fs-3">
+            Soverutiner
+        </div>
+    </nav>
+
+    <div class="container mx-auto pt-3">
+        <h1 class="today"></h1>
+
+        <div class="form-floating mb-3">
+            <input class="form-control" type="text" id="start-of-day" value="07:00" list="list-of-wakeups">
+            <label for="floatingInput">Klokkeslett morgen</label>
         </div>
 
-        <div class="playmode" style="display: none;">
-            <div id="display"></div>
-            <input type="text"
-                id="input-guess"
-                placeholder="Letter/word"
-                minlength="1">
-            <div class="input-guess-info"></div>
-            <button type="button" id="btn-guess-letter" class="btn-block">Guess letter</button>
-            <button type="button" id="btn-guess-word" class="btn-block">Guess word</button>
-            <button type="button" id="btn-give-up" class="btn-block">Give up</button>
-        </div>
-
-        <div class="results" style="display: none;">
-            <div>
-                Correct word: <span id="correct-word"></span>
-            </div>
-            <div>
-                Miss count: <span id="miss-count"></span>
-            </div>
-
-            <button type="button" id="btn-play-again" class="btn-block">Play again</button>
-        </div>
+        <ul class="list-group day-plan">
+        </ul>
     </div>
-    <script src="hangman.js"></script>
-    <script src="main.js"></script>
+
+    <footer class="fixed-bottom py-4 text-white bg-dark">
+        <div class="container">Plan: Hentet fra Babyverden</div>
+    </footer>
+
+    <datalist id="list-of-wakeups">
+        <option>05:30</option>
+        <option>06:00</option>
+        <option>06:30</option>
+        <option>07:00</option>
+        <option>07:30</option>
+        <option>08:00</option>
+        <option>08:30</option>
+    </datalist>
+    <script src="app.js"></script>
+
 </body>
 </html>
