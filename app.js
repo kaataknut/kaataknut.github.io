@@ -36,35 +36,43 @@ function showDayPlan(date) {
     ul.innerHTML = null;
 
 
-    ul.append(createLI(`${dateToHourAndMinute(date)} Morgen`));
+    ul.append(createLI(dateToHourAndMinute(date), "Morgen"));
 
     // 09
     date.setHours(date.getHours() + 2);
-    ul.append(createLI(`${dateToHourAndMinute(date)} Dupp nr 1 (45 min - 90 min)`));
+    ul.append(createLI(dateToHourAndMinute(date), "Dupp nr 1 (45 min - 90 min)"));
 
     // 1230
     date.setHours(date.getHours() + 3);
     date.setMinutes(date.getMinutes() + 30);
-    ul.append(createLI(`${dateToHourAndMinute(date)} Dupp nr 2 (90 min - 120 min)`));
+    ul.append(createLI(dateToHourAndMinute(date), "Dupp nr 2 (90 min - 120 min)"));
 
     // 1530
     date.setHours(date.getHours() + 3);
-    ul.append(createLI(`${dateToHourAndMinute(date)} Dupp nr 3 om det trengs (45 min - 60 min)`));
+    ul.append(createLI(dateToHourAndMinute(date), "Dupp nr 3 om det trengs (45 min - 60 min)"));
 
     // 18 kvelds rutine
     date.setHours(date.getHours() + 2);
     date.setMinutes(date.getMinutes() + 30);
-    ul.append(createLI(`${dateToHourAndMinute(date)} Kveldsrutine`));
+    ul.append(createLI(dateToHourAndMinute(date), "Kveldsrutine"));
 
     // 19 sove
     date.setHours(date.getHours() + 1);
-    ul.append(createLI(`${dateToHourAndMinute(date)} Natta`));
+    ul.append(createLI(dateToHourAndMinute(date), "Natta"));
 }
 
-function createLI(text) {
+function createLI(time, text) {
     const li = document.createElement("li");
+    const small = document.createElement("small");
+    small.innerText = time;
+    small.style.color = "#90506A";
+    li.appendChild(small);
     li.classList.add("list-group-item");
-    li.innerText = text;
+
+    const span = document.createElement("span");
+    span.innerText = text;
+    li.appendChild(span);
+
     return li;
 }
 
