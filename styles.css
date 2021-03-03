@@ -1,1 +1,13 @@
-/* #90506A */
+span.today {
+    width: 350px;
+}
+
+.btn-babyverden {
+    color: white;
+    background-color: #90506A;
+}
+
+.btn-babyverden:hover {
+    color: white;
+    box-shadow: inset 0 0 0 20rem inherit;
+}

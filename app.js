@@ -1,20 +1,70 @@
 const DAYS = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
-const MONTHS = ["Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "Oktober", "November", "Desember"];
+const MONTHS = ["Jan", "Feb", "Mars", "Apr", "Mai", "Juni", "Juli", "Aug", "Okt", "Nov", "Des"];
 const today = document.querySelector(".today");
-const startOfDay = document.querySelector("#start-of-day");
-const timeSeven = new Date();
+const startOfDay = document.querySelector("#wake-time");
+const currentDate = new Date();
 const wakeUpRegex = new RegExp("^(?<hours>[0-9]{2}):(?<minutes>[0-9]{2})");
+const dayItemTemplate = document.querySelector("#plan-item");
 
-timeSeven.setHours(7);
-timeSeven.setMinutes(0);
+const checkboxes = document.querySelectorAll("input[type='checkbox'][data-prop]");
 
-function initDay() {
-    const d = new Date();
+checkboxes.forEach(check => {
+    check.addEventListener("click", e => {
+        const prop = e.target.dataset.prop;
+        console.log(prop);
+        plan.update({ [prop]: e.target.checked });
+    });
+})
+
+currentDate.setHours(6);
+currentDate.setMinutes(0);
+const plan = new Plan(currentDate);
+
+(function () {
+    // Init default plan
+    plan.addItem({
+        minutesAfter: 0,
+        text: "Morgen"
+    });
+
+    // 09
+    plan.addItem({
+        minutesAfter: 150,
+        text: "Dupp nr 1 (45 min - 90 min)"
+    });
+
+    // 1230
+    plan.addItem({
+        minutesAfter: 210,
+        text: "Dupp nr 2 (90 min - 120 min)"
+    });
+
+    // 1530
+    plan.addItem({
+        minutesAfter: 180,
+        text: "Dupp nr 3 om det trengs (45 min - 60 min)"
+    });
+
+    // 18 kvelds rutine
+    plan.addItem({
+        minutesAfter: 150,
+        text: "Kveldsrutine"
+    });
+
+    // 19 sove
+    plan.addItem({
+        minutesAfter: 60,
+        text: "Natta"
+    });
+})();
+
+function showDay(d) {
     const date = d.getDate();
     const day = DAYS[d.getDay()];
     const month = MONTHS[d.getMonth()].toLowerCase();
 
     today.innerText = `${day} ${date}. ${month}`;
+    today.dataset.date = d;
 }
 
 startOfDay.addEventListener("input", (e) => {
@@ -23,68 +73,38 @@ startOfDay.addEventListener("input", (e) => {
         const d = new Date();
         d.setHours(Number(found.groups.hours));
         d.setMinutes(Number(found.groups.minutes));
+        plan.update({
+            start: d
+        });
         showDayPlan(d);
     }
 });
 
-initDay();
-showDayPlan(timeSeven);
+showDay(currentDate);
+showDayPlan(currentDate);
 
 function showDayPlan(date) {
-    // 07
     const ul = document.querySelector("ul.day-plan");
     ul.innerHTML = null;
 
+    plan.getItems()
+        .map(item => createLI(item.time, item.text))
+        .forEach(item => ul.appendChild(item));
 
-    ul.append(createLI(dateToHourAndMinute(date), "Morgen"));
+    checkboxes[0].checked = plan.get().hasVitaminD;
+    checkboxes[1].checked = plan.get().hasIron;
 
-    // 09
-    date.setHours(date.getHours() + 2);
-    ul.append(createLI(dateToHourAndMinute(date), "Dupp nr 1 (45 min - 90 min)"));
-
-    // 1230
-    date.setHours(date.getHours() + 3);
-    date.setMinutes(date.getMinutes() + 30);
-    ul.append(createLI(dateToHourAndMinute(date), "Dupp nr 2 (90 min - 120 min)"));
-
-    // 1530
-    date.setHours(date.getHours() + 3);
-    ul.append(createLI(dateToHourAndMinute(date), "Dupp nr 3 om det trengs (45 min - 60 min)"));
-
-    // 18 kvelds rutine
-    date.setHours(date.getHours() + 2);
-    date.setMinutes(date.getMinutes() + 30);
-    ul.append(createLI(dateToHourAndMinute(date), "Kveldsrutine"));
-
-    // 19 sove
-    date.setHours(date.getHours() + 1);
-    ul.append(createLI(dateToHourAndMinute(date), "Natta"));
 }
 
 function createLI(time, text) {
-    const li = document.createElement("li");
-    const small = document.createElement("small");
-    small.innerText = time;
-    small.style.color = "#90506A";
-    li.appendChild(small);
-    li.classList.add("list-group-item");
+    const temp = dayItemTemplate.cloneNode(true);
+    const li = temp.content.children[0];
 
-    const span = document.createElement("span");
+    const small = li.children[0];
+    small.innerText = time;
+
+    const span = li.children[1];
     span.innerText = text;
-    li.appendChild(span);
 
     return li;
-}
-
-function dateToHourAndMinute(d) {
-    const l = new Date(d.getTime())
-    const hour = String(l.getHours()).padStart(2, '0');
-    const minutes = String(l.getMinutes()).padStart(2, '0');
-
-    l.setMinutes(l.getMinutes() + 30);
-    const hour30 = String(l.getHours()).padStart(2, '0');
-    const minutes30 = String(l.getMinutes()).padStart(2, '0'); 
- 
-
-    return `${hour}:${minutes} - ${hour30}:${minutes30} `
 }
