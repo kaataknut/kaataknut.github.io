@@ -94,6 +94,14 @@ function showDayPlan(date) {
     checkboxes[0].checked = plan.get().hasVitaminD;
     checkboxes[1].checked = plan.get().hasIron;
 
+    startOfDay.value = formatTimeToInpu(plan.get().start);
+}
+
+function formatTimeToInpu(d) {
+    const hour = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+
+    return `${hour}:${minutes}`;
 }
 
 function createLI(time, text) {
